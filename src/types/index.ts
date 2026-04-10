@@ -36,6 +36,20 @@ export interface CpiData {
   history: DataPoint[];
 }
 
+export interface CmaDataPoint {
+  date: string;
+  balance: number;
+  change: number;
+}
+
+export interface CmaData {
+  current: number;
+  previous: number;
+  change: number;
+  updatedAt: string;
+  history: CmaDataPoint[];
+}
+
 export interface SummaryCardProps {
   tag: string;
   value: string;
@@ -44,6 +58,8 @@ export interface SummaryCardProps {
   changeLabel: string;
   updatedAt: string;
   href: string;
+  statusLabel?: string;
+  statusTone?: 'normal' | 'warning';
   isLoading?: boolean;
   error?: string | null;
 }

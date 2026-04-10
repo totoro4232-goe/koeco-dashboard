@@ -9,6 +9,8 @@ export default function SummaryCard({
   changeLabel,
   updatedAt,
   href,
+  statusLabel,
+  statusTone = 'normal',
   error,
 }: SummaryCardProps) {
   const dir = change > 0 ? 'up' : change < 0 ? 'down' : 'flat';
@@ -18,6 +20,11 @@ export default function SummaryCard({
     down: 'bg-down/10 text-down',
     flat: 'bg-gray-500/10 text-gray-400',
   }[dir];
+
+  const statusCls =
+    statusTone === 'warning'
+      ? 'bg-amber/10 text-amber border border-amber/30'
+      : 'bg-up/10 text-up border border-up/30';
 
   return (
     <Link href={href} className="block group">
@@ -37,6 +44,9 @@ export default function SummaryCard({
         <span className={`inline-flex items-center gap-1 font-mono text-xs px-2.5 py-1 rounded-full ${changeCls}`}>
           {arrow} {changeLabel}
         </span>
+        {statusLabel && (
+          <p className={`mt-2 inline-flex items-center px-2 py-1 rounded text-[11px] font-mono ${statusCls}`}>{statusLabel}</p>
+        )}
         {updatedAt && <p className="mt-2 text-xs text-gray-500">기준: {updatedAt}</p>}
         {error && <p className="mt-2 font-mono text-[11px] text-down bg-down/10 rounded px-2 py-1">⚠ {error}</p>}
       </div>

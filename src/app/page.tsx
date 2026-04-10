@@ -1,5 +1,6 @@
 import { getInterestRate, getExchangeRate } from '@/lib/api/ecos';
 import { getCPI } from '@/lib/api/kosis';
+import { getCmaData } from '@/lib/api/fsc';
 import SummaryCard from '@/components/dashboard/SummaryCard';
 import PeriodFilter from '@/components/dashboard/PeriodFilter';
 import SummaryBanner from '@/components/dashboard/SummaryBanner';
@@ -16,18 +17,21 @@ interface PageProps {
 export default async function DashboardPage({ searchParams }: PageProps) {
   const period = (searchParams.period ?? '1y') as Period;
 
-  const [rateResult, fxResult, cpiResult] = await Promise.allSettled([
+  const [rateResult, fxResult, cpiResult, cmaResult] = await Promise.allSettled([
     getInterestRate(period),
     getExchangeRate('USD', period),
     getCPI(period),
+    getCmaData(period),
   ]);
 
   const rateData = rateResult.status === 'fulfilled' ? rateResult.value : [];
   const fxData = fxResult.status === 'fulfilled' ? fxResult.value : [];
   const cpiData = cpiResult.status === 'fulfilled' ? cpiResult.value : [];
+  const cmaData = cmaResult.status === 'fulfilled' ? cmaResult.value : [];
   const rateHasData = rateData.length > 0;
   const fxHasData = fxData.length > 0;
   const cpiHasData = cpiData.length > 0;
+  const cmaHasData = cmaData.length > 0;
 
   const rateCurrent = rateData.at(-1)?.value ?? 0;
   const ratePrev = rateData.at(-2)?.value ?? 0;
@@ -42,12 +46,16 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const cpiPrev = cpiData.at(-2)?.value ?? 0;
   const cpiChange = parseFloat((cpiCurrent - cpiPrev).toFixed(2));
 
+  const cmaCurrent = cmaData.at(-1)?.balance ?? 0;
+  const cmaPrev = cmaData.at(-2)?.balance ?? 0;
+  const cmaChange = parseFloat((cmaCurrent - cmaPrev).toFixed(2));
+
   return (
     <div className="max-w-6xl mx-auto px-6 py-9">
       <PeriodFilter current={period} />
 
       <p className="font-mono text-[11px] tracking-widest uppercase text-gray-500 mb-4">핵심 지표 현황</p>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
         <SummaryCard
           tag="기준금리 · BOK"
           value={rateHasData ? rateCurrent.toString() : '-'}
@@ -95,6 +103,18 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                 ? '해당 기간의 데이터가 없습니다.'
                 : null
           }
+        />
+        <SummaryCard
+          tag="CMA 잔고 · 금융투자협회"
+          value={cmaHasData ? formatNumber(cmaCurrent) : '-'}
+          unit="억원"
+          change={cmaChange}
+          changeLabel={cmaHasData ? `${formatSigned(cmaChange)}억원 전일 대비` : '제공기관 API 응답 지연'}
+          updatedAt={cmaData.at(-1)?.date ?? ''}
+          href="/detail/cma"
+          statusLabel={cmaHasData ? '정상 수집' : 'API 지연'}
+          statusTone={cmaHasData ? 'normal' : 'warning'}
+          error={cmaResult.status === 'rejected' ? String(cmaResult.reason) : null}
         />
       </div>
 

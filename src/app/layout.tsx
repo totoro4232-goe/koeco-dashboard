@@ -24,12 +24,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={`${noto.variable} ${dmMono.variable}`}>
-      <body className="bg-bg-primary text-white min-h-screen flex flex-col font-sans">
+      <body className="bg-bg-primary text-slate-900 min-h-screen flex flex-col font-sans">
         <div
           className="fixed inset-0 pointer-events-none z-0 opacity-30"
           style={{
             backgroundImage:
-              'linear-gradient(#252a38 1px, transparent 1px), linear-gradient(90deg, #252a38 1px, transparent 1px)',
+              'linear-gradient(#d7e1f2 1px, transparent 1px), linear-gradient(90deg, #d7e1f2 1px, transparent 1px)',
             backgroundSize: '40px 40px',
           }}
         />

@@ -14,15 +14,15 @@ const config: Config = {
       },
       colors: {
         bg: {
-          primary: '#0d0f14',
-          secondary: '#13161e',
-          tertiary: '#1a1e28',
+          primary: '#f4f7ff',
+          secondary: '#ffffff',
+          tertiary: '#eef3ff',
         },
         border: {
-          DEFAULT: '#252a38',
-          hover: '#3a4058',
+          DEFAULT: '#d7e1f2',
+          hover: '#b9c8e6',
         },
-        accent: '#4f8ef7',
+        accent: '#3b82f6',
         up: '#34d399',
         down: '#f87171',
         amber: '#fbbf24',

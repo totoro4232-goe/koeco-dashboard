@@ -11,12 +11,22 @@
     box-sizing: border-box;
   }
   body {
-    background: #0d0f14;
-    color: #e8eaf0;
+    background: #f4f7ff;
+    color: #0f172a;
   }
 }
 
 @layer utilities {
+  .text-gray-500 {
+    color: #64748b !important;
+  }
+  .text-gray-400 {
+    color: #475569 !important;
+  }
+  .text-white {
+    color: #0f172a !important;
+  }
+
   .animate-fade-up {
     animation: fadeUp 0.5s ease forwards;
     opacity: 0;
